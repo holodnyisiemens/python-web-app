@@ -13,6 +13,16 @@ class UserDTO(UserAddDTO):
     id: UUID
 
 
+class UserUpdateDTO(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    description: Optional[str] = None
+
+    class Config:
+        # ValidationError for extra attributes
+        extra = "forbid"
+
+
 class UserRelDTO(UserDTO):
     addresses: list["AddressDTO"]
 
