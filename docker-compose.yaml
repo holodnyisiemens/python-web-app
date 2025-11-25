@@ -1,5 +1,6 @@
 services:
   db:
+    container_name: python-web-app-db
     image: postgres:15
     environment:
       POSTGRES_USER: ${DB_USER}
@@ -16,8 +17,10 @@ services:
       retries: 10
 
   migrations:
+    container_name: python-web-app-migrations
     build: .
     image: python-web-app-migrations:latest
+    pull_policy: never
     command: alembic upgrade head
     depends_on:
       db:
