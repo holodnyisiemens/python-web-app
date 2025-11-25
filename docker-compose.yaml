@@ -35,3 +35,7 @@ services:
     ports:
       - "8888:8888"
     restart: unless-stopped
+
+volumes:
+  postgres_data:
+    name: "postgres_data"
