@@ -12,7 +12,7 @@ Rename file (without editing):
 mv .env.example .env
 ```
 
-Start app and PostgreSQL instance (change the 5432 port in .env if required):
+Start app and PostgreSQL instance:
 ```sh
 docker compose up -d
 ```
