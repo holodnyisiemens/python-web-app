@@ -26,3 +26,8 @@ Test API using:
 1. http://localhost:8888/schema/swagger
 2. curl
 3. etc.
+
+Deleting all Docker objects from docker-compose.yaml including containers, volumes and images:
+```sh
+docker compose down -v --rmi all
+```
