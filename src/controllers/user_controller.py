@@ -1,9 +1,8 @@
-from typing import List, Annotated
+from typing import Optional
 from uuid import UUID
 
 from litestar import Controller, get, post, put, delete
 from litestar.di import Provide
-from litestar.params import Body
 from litestar.status_codes import HTTP_200_OK
 
 from di.providers import provide_user_service
@@ -51,10 +50,10 @@ class UserController(Controller):
     async def get_users_with_filters(
         self, 
         user_service: UserService,
-        count: int | None = None,
+        count: Optional[int] = None,
         page: int = 1,
-        username: str | None = None,
-        email: str | None = None
+        username: Optional[str] = None,
+        email: Optional[str] = None
     ) -> list[UserDTO]:
         """Получить пользователей с фильтрами"""
         filters = {}
