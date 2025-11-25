@@ -25,6 +25,7 @@ services:
     restart: on-failure
 
   python-web-app:
+    container_name: python-web-app
     build: .
     image: python-web-app:latest
     pull_policy: never
