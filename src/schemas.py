@@ -12,6 +12,10 @@ class UserAddDTO(BaseModel):
 class UserDTO(UserAddDTO):
     id: UUID
 
+    model_config = {
+        "from_attributes": True
+    }
+
 
 class UserUpdateDTO(BaseModel):
     username: Optional[str] = None
