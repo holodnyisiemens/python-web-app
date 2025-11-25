@@ -17,6 +17,11 @@ Start app and PostgreSQL instance:
 docker compose up -d
 ```
 
+Wait for start:
+```sh
+docker ps
+```
+
 Test API using:
 1. http://localhost:8888/schema/swagger
 2. curl
