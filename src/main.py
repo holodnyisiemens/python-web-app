@@ -11,7 +11,6 @@ app = Litestar(
         "db_session": Provide(provide_db_session),
         "user_repository": Provide(provide_user_repository),
     },
-    debug=True,
 )
 
 
