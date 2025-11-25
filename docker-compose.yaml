@@ -1,23 +1,23 @@
 services:
   db:
-    container_name: db
     image: postgres:15
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
-      POSTGRES_PORT: ${DB_PORT}
+    env_file:
+      - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U $DB_USER -d $DB_NAME"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   migrations:
-    container_name: migrations
     build: .
+    image: python-web-app-migrations:latest
     command: alembic upgrade head
     depends_on:
       db:
@@ -25,7 +25,6 @@ services:
     restart: on-failure
 
   python-web-app:
-    container_name: python-web-app
     build: .
     image: python-web-app:latest
     pull_policy: never
@@ -37,5 +36,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  postgres_data:
-    name: "postgres_data"
+  db_data:
+    name: "db_data"
