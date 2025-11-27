@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
 from uuid import UUID
 
@@ -12,9 +12,9 @@ class UserAddDTO(BaseModel):
 class UserDTO(UserAddDTO):
     id: UUID
 
-    model_config = {
-        "from_attributes": True
-    }
+    model_config = ConfigDict(
+        from_attributes=True,
+    )
 
 
 class UserUpdateDTO(BaseModel):
@@ -22,9 +22,10 @@ class UserUpdateDTO(BaseModel):
     email: Optional[EmailStr] = None
     description: Optional[str] = None
 
-    class Config:
+    model_config = ConfigDict(
         # ValidationError for extra attributes
-        extra = "forbid"
+        extra="forbid",
+    )
 
 
 class UserRelDTO(UserDTO):
