@@ -49,3 +49,13 @@ class TestUserRepository:
         assert updated_user.id == user.id
         assert updated_user.email == user.email
         assert updated_user.description == user.description
+
+    @pytest.mark.asyncio
+    async def test_delete_user(self, user_repository: UserRepository):
+        user, user_data = await self._create_test_user(user_repository)
+
+        await user_repository.delete(user.id)
+
+        found_user = await user_repository.get_by_email(user_data.email)
+
+        assert found_user is None
