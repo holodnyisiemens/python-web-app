@@ -63,3 +63,9 @@ class UserController(Controller):
             filters["email"] = email
             
         return await user_service.get_by_filter(count, page, **filters)
+
+    @get("/{email:str}")
+    async def get_user_by_email(self, user_service: UserService, email: str) -> UserDTO:
+        """Получить пользователя по email"""
+        user = await user_service.get_by_email(email)
+        return user

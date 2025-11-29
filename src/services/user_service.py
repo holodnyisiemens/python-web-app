@@ -41,3 +41,9 @@ class UserService:
         users = await self.user_repo.get_by_filter(count, page, **kwargs)
         user_dtos = [UserDTO.model_validate(user) for user in users]
         return user_dtos
+
+    async def get_by_email(self, email: str) -> UserDTO:
+        user = await self.user_repo.get_by_email(email)
+        if not user:
+            raise NotFoundException(detail=f"User with email {email} not found")
+        return UserDTO.model_validate(user)
