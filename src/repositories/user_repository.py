@@ -68,3 +68,8 @@ class UserRepository:
 
         users = (await self.session.execute(stmt)).scalars().all()
         return users
+
+    async def get_by_email(self, email: str) -> Optional[User]:
+        stmt = select(User).where(User.email == email)
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
