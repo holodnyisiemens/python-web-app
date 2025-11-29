@@ -1,6 +1,6 @@
 import pytest
 
-from schemas import UserAddDTO
+from schemas import UserAddDTO, UserUpdateDTO
 from repositories.user_repository import UserRepository
 
 
@@ -33,3 +33,19 @@ class TestUserRepository:
         assert found_user.email == user_data.email
         assert found_user.username == user_data.username
         assert found_user.description == user_data.description
+
+    @pytest.mark.asyncio
+    async def test_update_user(self, user_repository: UserRepository):
+        user, user_data = await self._create_test_user(user_repository)
+
+        new_user_data = UserUpdateDTO(username="Updated")
+
+        await user_repository.update(user.id, new_user_data)
+
+        updated_user = await user_repository.get_by_email(user_data.email)
+        
+        assert updated_user.username == new_user_data.username
+
+        assert updated_user.id == user.id
+        assert updated_user.email == user.email
+        assert updated_user.description == user.description
