@@ -65,3 +65,16 @@ class TestUserRepository:
 
         found_user = await user_repository.get_by_email(user_data_1.email)
         assert found_user is None
+
+    @pytest.mark.asyncio
+    async def test_get_all_users(self, user_repository: UserRepository):
+        await self._create_test_user(user_repository, user_data_1)
+        await self._create_test_user(user_repository, user_data_2)
+
+        users_list = await user_repository.get_by_filter()
+
+        user_emails = [user.email for user in users_list]
+
+        assert len(users_list) == 2
+        assert user_emails[0] == user_data_1.email
+        assert user_emails[1] == user_data_2.email
