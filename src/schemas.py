@@ -3,7 +3,13 @@ from typing import Optional
 from uuid import UUID
 
 
-class UserAddDTO(BaseModel):
+class BaseDTO(BaseModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+    )
+
+
+class UserAddDTO(BaseDTO):
     username: str
     email: EmailStr
     description: Optional[str] = None
@@ -12,17 +18,14 @@ class UserAddDTO(BaseModel):
 class UserDTO(UserAddDTO):
     id: UUID
 
-    model_config = ConfigDict(
-        from_attributes=True,
-    )
 
-
-class UserUpdateDTO(BaseModel):
+class UserUpdateDTO(BaseDTO):
     username: Optional[str] = None
     email: Optional[EmailStr] = None
     description: Optional[str] = None
 
     model_config = ConfigDict(
+        from_attributes=True,
         # ValidationError for extra attributes
         extra="forbid",
     )
@@ -32,7 +35,7 @@ class UserRelDTO(UserDTO):
     addresses: list["AddressDTO"]
 
 
-class AddressAddDTO(BaseModel):
+class AddressAddDTO(BaseDTO):
     user_id: UUID
     street: str
     city: str
@@ -60,11 +63,23 @@ class ProductDTO(ProductAddDTO):
     id: UUID
 
 
+class ProductUpdateDTO(BaseDTO):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        # ValidationError for extra attributes
+        extra="forbid",
+    )
+
+
 class ProductRelDTO(ProductDTO):
     carts: list["CartDTO"]
 
 
-class CartAddDTO(BaseModel):
+class CartAddDTO(BaseDTO):
     customer_id: UUID
     delivery_address_id: UUID
 
@@ -77,7 +92,7 @@ class CartRelDTO(CartDTO):
     products: list["ProductDTO"]
 
 
-class CartProductAddDTO(BaseModel):
+class CartProductAddDTO(BaseDTO):
     cart_id: UUID
     product_id: UUID
     quantity: int = 1
