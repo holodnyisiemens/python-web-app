@@ -6,9 +6,12 @@ from config import settings
 from database import Base
 from main import app
 from repositories.user_repository import UserRepository
+from repositories.product_repository import ProductRepository
+from repositories.cart_repository import CartRepository
+from repositories.address_repository import AddressRepository
 
 
-TEST_DATABASE_URL = f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/test_db"
+TEST_DATABASE_URL = f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD.get_secret_value()}@{settings.DB_HOST}:{settings.DB_PORT}/test_db"
 
 @pytest.fixture()
 async def engine():
@@ -37,3 +40,19 @@ async def session(engine, tables):
 async def user_repository(session):
     return UserRepository(session)
 
+@pytest.fixture
+async def product_repository(session):
+    return ProductRepository(session)
+
+@pytest.fixture
+def address_repository(session):
+    return AddressRepository(session)
+
+@pytest.fixture
+def cart_repository(session):
+    return CartRepository(session)
+
+@pytest.fixture
+async def client():
+    async with AsyncTestClient(app=app) as client:
+        yield client
