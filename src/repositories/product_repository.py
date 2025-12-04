@@ -42,3 +42,8 @@ class ProductRepository:
         stmt = select(Product)
         result = await self.session.execute(stmt)
         return result.scalars().all()
+
+    async def get_by_title(self, title: str) -> Optional[Product]:
+        stmt = select(Product).where(Product.title == title)
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
