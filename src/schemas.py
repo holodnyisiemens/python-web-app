@@ -49,6 +49,22 @@ class AddressDTO(AddressAddDTO):
     id: UUID
 
 
+class AddressUpdateDTO(BaseDTO):
+    user_id: Optional[UUID] = None
+    street: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    zip_code: Optional[str] = None
+    country: Optional[str] = None
+    is_primary: Optional[bool] = None
+    
+    model_config = ConfigDict(
+        from_attributes=True,
+        # ValidationError for extra attributes
+        extra="forbid",
+    )
+
+
 class AddressRelDTO(AddressDTO):
     user: "UserDTO"
 
@@ -86,6 +102,17 @@ class CartAddDTO(BaseDTO):
 
 class CartDTO(CartAddDTO):
     id: UUID
+
+
+class CartUpdateDTO(BaseDTO):
+    customer_id: Optional[UUID] = None
+    delivery_address_id: Optional[UUID] = None
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        # ValidationError for extra attributes
+        extra="forbid",
+    )
 
 
 class CartRelDTO(CartDTO):
