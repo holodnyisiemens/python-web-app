@@ -13,18 +13,18 @@ class UserRepository:
         self.session = session
 
     async def get_by_id(self, user_id: UUID) -> Optional[User]:
-        stmt = select(User).where(User.id == user_id)
-        result = await self.session.execute(stmt)
-        return result.scalar_one_or_none()
+        return await self.session.get(User, user_id)
 
     async def create(self, user_data: UserAddDTO) -> User:
         user = User(**user_data.model_dump())
         self.session.add(user)
-        await self.session.commit()
+
+        await self.session.flush()
         await self.session.refresh(user)
+        
         return user
 
-    async def delete(self, user_id: UUID) -> User | None:
+    async def delete(self, user_id: UUID) -> Optional[User]:
         stmt = select(User).where(User.id == user_id)
         result = await self.session.execute(stmt)
         user = result.scalar_one_or_none()
@@ -71,5 +71,10 @@ class UserRepository:
 
     async def get_by_email(self, email: str) -> Optional[User]:
         stmt = select(User).where(User.email == email)
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
+
+    async def get_by_username(self, username: str) -> Optional[User]:
+        stmt = select(User).where(User.username == username)
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
