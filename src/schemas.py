@@ -73,6 +73,7 @@ class ProductAddDTO(BaseModel):
     title: str
     description: Optional[str] = None
     price: float
+    stock_qty: int
 
 
 class ProductDTO(ProductAddDTO):
@@ -83,6 +84,7 @@ class ProductUpdateDTO(BaseDTO):
     title: Optional[str] = None
     description: Optional[str] = None
     price: Optional[float] = None
+    stock_qty: Optional[int] = None
 
     model_config = ConfigDict(
         from_attributes=True,
