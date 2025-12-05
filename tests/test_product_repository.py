@@ -9,12 +9,14 @@ product_data_1 = ProductAddDTO(
     title="IPhone 17",
     description="newest IPhone",
     price=150000,
+    stock_qty=10,
 )
 
 product_data_2 = ProductAddDTO(
     title="IPhone 16",
     description="previous IPhone",
     price=100000,
+    stock_qty=10,
 )
 
 
@@ -31,6 +33,7 @@ class TestProductRepository:
         assert product.title == product_data_1.title
         assert product.description == product_data_1.description
         assert product.price == product_data_1.price
+        assert product.stock_qty == product_data_1.stock_qty
 
     @pytest.mark.asyncio
     async def test_update_product(self, product_repository: ProductRepository):
@@ -47,6 +50,7 @@ class TestProductRepository:
         assert updated_product.id == product.id
         assert updated_product.description == product.description
         assert updated_product.price == product.price
+        assert updated_product.stock_qty == product.stock_qty
 
     @pytest.mark.asyncio
     async def test_delete_product(self, product_repository: ProductRepository):

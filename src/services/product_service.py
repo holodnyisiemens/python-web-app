@@ -1,4 +1,3 @@
-from typing import Optional
 from uuid import UUID
 
 from litestar.exceptions import NotFoundException, HTTPException

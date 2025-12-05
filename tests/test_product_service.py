@@ -10,6 +10,7 @@ from services.product_service import ProductService
 product_data = ProductAddDTO(
     title="example",
     price=1000,
+    stock_qty=10,
 )
 
 
@@ -27,6 +28,7 @@ class TestProductService:
             "id": uuid4(),
             "title": "example",
             "price": 1000,
+            "stock_qty": 10,
         }
 
         product_service = ProductService(product_repo=mock_product_repo)
@@ -47,7 +49,7 @@ class TestProductService:
 
         product_id = uuid4()
 
-        fake_product = Mock(id=product_id, title="example", price=1000)
+        fake_product = Mock(id=product_id, title="example", price=1000, stock_qty=10)
         mock_product_repo.get_by_id.return_value = fake_product
 
         mock_product_repo.delete.return_value = None
