@@ -119,6 +119,7 @@ class CartUpdateDTO(BaseDTO):
 
 class CartRelDTO(CartDTO):
     products: list["ProductDTO"]
+    cart_items: list["CartProductDTO"]
 
 
 class CartProductAddDTO(BaseDTO):
@@ -129,3 +130,8 @@ class CartProductAddDTO(BaseDTO):
 
 class CartProductDTO(CartProductAddDTO):
     pass
+
+
+class CartProductRelDTO(CartProductDTO):
+    cart: CartDTO
+    product: ProductDTO

@@ -120,6 +120,12 @@ class Cart(Base):
         secondary="cart_product",
     )
 
+    cart_items: Mapped[list["CartProduct"]] = relationship(
+        back_populates="cart",
+        cascade="all, delete-orphan",
+        overlaps="products,carts",
+    )
+
 
 class CartProduct(Base):
     __tablename__ = "cart_product"
@@ -135,3 +141,12 @@ class CartProduct(Base):
     )
 
     quantity: Mapped[int] = mapped_column(default=1)
+
+    cart: Mapped["Cart"] = relationship(
+        back_populates="cart_items",
+        overlaps="products,carts",
+    )
+    
+    product: Mapped["Product"] = relationship(
+        overlaps="products,carts",
+    )
