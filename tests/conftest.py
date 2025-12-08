@@ -9,6 +9,7 @@ from repositories.user_repository import UserRepository
 from repositories.product_repository import ProductRepository
 from repositories.cart_repository import CartRepository
 from repositories.address_repository import AddressRepository
+from schemas import CartAddDTO, UserAddDTO, ProductAddDTO, AddressAddDTO, UserDTO, AddressDTO, CartDTO, ProductDTO
 
 
 TEST_DATABASE_URL = f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD.get_secret_value()}@{settings.DB_HOST}:{settings.DB_PORT}/test_db"
@@ -56,3 +57,86 @@ async def cart_repository(session):
 async def client():
     async with AsyncTestClient(app=app) as client:
         yield client
+
+# фикстуры с тестовыми данными: до и после создания объектов по-отдельности
+@pytest.fixture
+async def user_data_1() -> UserAddDTO:
+    return UserAddDTO(
+        username="Alexey",
+        email="email@example.com",
+    )
+
+@pytest.fixture
+async def user_1(user_repository: UserRepository, user_data_1: UserAddDTO) -> UserDTO:
+    return await user_repository.create(user_data_1)
+
+@pytest.fixture
+async def user_data_2() -> UserAddDTO:
+    return UserAddDTO(
+        username="Alexander",
+        email="test@example.com",
+    )
+
+@pytest.fixture
+async def user_2(user_repository: UserRepository, user_data_2: UserAddDTO) -> UserDTO:
+    return await user_repository.create(user_data_2)
+
+@pytest.fixture
+async def address_data_1(user_1: UserDTO) -> AddressAddDTO:
+    return AddressAddDTO(
+        user_id=user_1.id,
+        street="Lenina",
+        city="Ekb",
+        country="Russia",
+    )
+
+@pytest.fixture
+async def address_1(address_repository: AddressRepository, address_data_1: AddressAddDTO) -> AddressDTO:
+    return await address_repository.create(address_data_1)
+
+@pytest.fixture
+async def address_data_2(user_2: UserDTO) -> AddressAddDTO:
+    return AddressAddDTO(
+        user_id=user_2.id,
+        street="Mira",
+        city="Ekb",
+        country="Russia",
+    )
+
+@pytest.fixture
+async def address_2(address_repository: AddressRepository, address_data_2: AddressAddDTO) -> AddressDTO:
+    return await address_repository.create(address_data_2)
+
+@pytest.fixture
+async def cart_data_1(address_1: AddressDTO) -> CartAddDTO:    
+    return CartAddDTO(
+        customer_id=address_1.user_id,
+        delivery_address_id=address_1.id,
+    )
+
+@pytest.fixture
+async def cart_1(cart_repository: CartRepository, cart_data_1: CartAddDTO) -> CartDTO:
+    return await cart_repository.create(cart_data_1)
+
+@pytest.fixture
+async def cart_data_2(address_2: AddressDTO) -> CartAddDTO:    
+    return CartAddDTO(
+        customer_id=address_2.user_id,
+        delivery_address_id=address_2.id,
+    )
+
+@pytest.fixture
+async def cart_2(cart_repository: CartRepository, cart_data_2: CartAddDTO) -> CartDTO:
+    return await cart_repository.create(cart_data_2)
+
+@pytest.fixture
+async def product_data_1() -> ProductAddDTO:    
+    return ProductAddDTO(
+        title="Headphones",
+        price=999.99,
+        stock_qty=2,
+    )
+
+@pytest.fixture
+async def product_1(product_repository: ProductRepository, product_data_1: ProductAddDTO) -> ProductDTO:
+    return await product_repository.create(product_data_1)
