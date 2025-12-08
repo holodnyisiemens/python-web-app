@@ -56,7 +56,7 @@ class TestCartRepository:
 
         new_cart_data = CartUpdateDTO(customer_id=new_user.id, delivery_address_id=new_address.id)
 
-        await cart_repository.update(cart.id, new_cart_data)
+        await cart_repository.update(cart, new_cart_data)
 
         updated_cart = await cart_repository.get_by_id(cart.id)
         
@@ -67,7 +67,7 @@ class TestCartRepository:
     @pytest.mark.asyncio
     async def test_delete_cart(self, cart_repository: CartRepository, user_repository: UserRepository, address_repository: AddressRepository):
         cart, _ = await self._create_test_cart(cart_repository, user_repository, address_repository)
-        await cart_repository.delete(cart.id)
+        await cart_repository.delete(cart)
 
         found_cart = await cart_repository.get_by_id(cart.id)
         assert found_cart is None
