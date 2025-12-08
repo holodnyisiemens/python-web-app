@@ -71,3 +71,8 @@ class CartRepository:
         self.session.add(new_item)
         await self.session.flush()
         return new_item
+
+    async def get_all(self):
+        stmt = select(Cart)
+        result = await self.session.execute(stmt)
+        return result.scalars().all()

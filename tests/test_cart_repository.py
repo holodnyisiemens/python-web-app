@@ -116,3 +116,14 @@ class TestCartRepository:
 
         assert cart_item_2.quantity == 5
         assert cart_item_1 is cart_item_2
+
+    @pytest.mark.asyncio
+    async def test_get_all_carts(self, cart_repository: CartRepository, user_repository: UserRepository, address_repository: AddressRepository):
+        _, cart_data = await self._create_test_cart(cart_repository, user_repository, address_repository)
+
+        cart_list = await cart_repository.get_all()
+
+        cart_customers = [cart.customer_id for cart in cart_list]
+
+        assert len(cart_list) == 1
+        assert cart_customers[0] == cart_data.customer_id
