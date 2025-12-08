@@ -140,3 +140,15 @@ async def product_data_1() -> ProductAddDTO:
 @pytest.fixture
 async def product_1(product_repository: ProductRepository, product_data_1: ProductAddDTO) -> ProductDTO:
     return await product_repository.create(product_data_1)
+
+@pytest.fixture
+async def product_data_2() -> ProductAddDTO:    
+    return ProductAddDTO(
+        title="JBL",
+        price=1500,
+        stock_qty=0,
+    )
+
+@pytest.fixture
+async def product_2(product_repository: ProductRepository, product_data_2: ProductAddDTO) -> ProductDTO:
+    return await product_repository.create(product_data_2)
