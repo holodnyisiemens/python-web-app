@@ -24,34 +24,24 @@ class UserRepository:
         
         return user
 
-    async def delete(self, user_id: UUID) -> Optional[User]:
-        stmt = select(User).where(User.id == user_id)
-        result = await self.session.execute(stmt)
-        user = result.scalar_one_or_none()
-        if not user:
-            return None
+    async def delete(self, user: User) -> None:
         await self.session.delete(user)
-        await self.session.commit()
-        return user
+        await self.session.flush()
 
-    async def update(self, user_id: UUID, user_data: UserUpdateDTO) -> User:
-        stmt = select(User).where(User.id == user_id)
-        result = await self.session.execute(stmt)
-        user = result.scalar_one_or_none()
-        if not user:
-            return None
+    async def update(self, user: User, user_data: UserUpdateDTO) -> User:
         # обновляем только переданные поля
         update_data = user_data.model_dump(exclude_unset=True)
-        
         for field, value in update_data.items():
             setattr(user, field, value)
 
-        await self.session.commit()
+        await self.session.flush()
         await self.session.refresh(user)
+
         return user
     
     async def get_user_count(self) -> int:
-        result = await self.session.execute(select(func.count(User.id)))
+        stmt = select(func.count(User.id))
+        result = await self.session.execute(stmt)
         return result.scalar_one()
     
     async def get_by_filter(self, count: Optional[int] = None, page: int = 1, **kwargs) -> list[User]:

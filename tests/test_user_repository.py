@@ -19,8 +19,7 @@ user_data_2 = UserAddDTO(
 
 class TestUserRepository:
     async def _create_test_user(self, user_repository: UserRepository, user_data: UserAddDTO) -> UserDTO:
-        user = await user_repository.create(user_data)
-        return user
+        return await user_repository.create(user_data)
 
     @pytest.mark.asyncio
     async def test_create_user(self, user_repository: UserRepository):
@@ -48,7 +47,7 @@ class TestUserRepository:
 
         new_user_data = UserUpdateDTO(username="Updated")
 
-        await user_repository.update(user.id, new_user_data)
+        await user_repository.update(user, new_user_data)
 
         updated_user = await user_repository.get_by_email(user_data_1.email)
         
@@ -61,7 +60,7 @@ class TestUserRepository:
     @pytest.mark.asyncio
     async def test_delete_user(self, user_repository: UserRepository):
         user = await self._create_test_user(user_repository, user_data_1)
-        await user_repository.delete(user.id)
+        await user_repository.delete(user)
 
         found_user = await user_repository.get_by_email(user_data_1.email)
         assert found_user is None
