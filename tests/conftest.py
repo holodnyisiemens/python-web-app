@@ -45,11 +45,11 @@ async def product_repository(session):
     return ProductRepository(session)
 
 @pytest.fixture
-def address_repository(session):
+async def address_repository(session):
     return AddressRepository(session)
 
 @pytest.fixture
-def cart_repository(session):
+async def cart_repository(session):
     return CartRepository(session)
 
 @pytest.fixture
