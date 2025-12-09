@@ -1,5 +1,5 @@
 import pytest
-from litestar.testing import AsyncTestClient, create_test_client
+from litestar.testing import AsyncTestClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngine, async_sessionmaker
 from litestar import Litestar
 from litestar.di import Provide
@@ -13,7 +13,9 @@ from repositories.cart_repository import CartRepository
 from repositories.address_repository import AddressRepository
 from schemas import CartAddDTO, UserAddDTO, ProductAddDTO, AddressAddDTO, UserDTO, AddressDTO, CartDTO, ProductDTO
 from controllers.user_controller import UserController
+from controllers.cart_controller import CartController
 from services.user_service import UserService
+from services.cart_service import CartService
 
 
 TEST_DATABASE_URL = f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD.get_secret_value()}@{settings.DB_HOST}:{settings.DB_PORT}/test_db"
@@ -62,12 +64,18 @@ async def mock_user_service():
     return AsyncMock(spec=UserService)
 
 @pytest.fixture
-async def client(mock_user_service, user_repository):
+async def mock_cart_service():
+    return AsyncMock(spec=CartService)
+
+@pytest.fixture
+async def client(mock_user_service, user_repository, mock_cart_service, cart_repository):
     app = Litestar(
-        route_handlers=[UserController],
+        route_handlers=[UserController, CartController],
         dependencies={
             "user_repository": Provide(lambda: user_repository, sync_to_thread=False),
             "user_service": Provide(lambda: mock_user_service, sync_to_thread=False),
+            "cart_repository": Provide(lambda: cart_repository, sync_to_thread=False),
+            "cart_service": Provide(lambda: mock_cart_service, sync_to_thread=False),
         },
     )
     async with AsyncTestClient(app) as client:
