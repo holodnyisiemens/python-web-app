@@ -5,14 +5,16 @@ from litestar.exceptions import NotFoundException, HTTPException
 from repositories.cart_repository import CartRepository
 from repositories.user_repository import UserRepository
 from repositories.address_repository import AddressRepository
-from schemas import CartDTO, CartAddDTO, CartUpdateDTO
+from repositories.product_repository import ProductRepository
+from schemas import CartDTO, CartAddDTO, CartUpdateDTO, CartProductDTO
 
 
-class CartService:
-    def __init__(self, cart_repo: CartRepository, user_repo: UserRepository, address_repo: AddressRepository):
+class CartService:  
+    def __init__(self, cart_repo: CartRepository, user_repo: UserRepository, address_repo: AddressRepository, product_repo: ProductRepository):
         self.cart_repo = cart_repo
         self.user_repo = user_repo
         self.address_repo = address_repo
+        self.product_repo = product_repo
 
     async def get_by_id(self, cart_id: UUID) -> CartDTO:
         cart = await self.cart_repo.get_by_id(cart_id)
@@ -27,7 +29,7 @@ class CartService:
         except:
             await self.cart_repo.session.rollback()
             raise HTTPException(status_code=400, detail=f"Cart create error")
-    
+
         return CartDTO.model_validate(cart)
 
     async def delete(self, cart_id: UUID) -> None:
@@ -65,3 +67,20 @@ class CartService:
             raise HTTPException(status_code=400, detail=f"Cart update error")    
 
         return CartDTO.model_validate(cart)
+    
+    async def add_product(self, cart_id: UUID, product_id: UUID, qty: int = 1) -> CartProductDTO:
+        cart = await self.cart_repo.get_by_id(cart_id)
+        if not cart:
+            raise HTTPException(status_code=404, detail=f"Cart with ID {cart_id} not found")
+
+        product = await self.product_repo.get_by_id(product_id)
+        if not product:
+            raise HTTPException(status_code=404, detail=f"Product with ID {product_id} not found")
+
+        try:
+            cart = await self.cart_repo.get_cart_with_items(cart)
+            await self.cart_repo.add_product(cart, product, qty)
+            await self.cart_repo.session.commit()
+        except:
+            await self.cart_repo.session.rollback()
+            raise HTTPException(status_code=400, detail=f"Error while add product to cart") 
