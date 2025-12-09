@@ -133,7 +133,7 @@ async def cart_2(cart_repository: CartRepository, cart_data_2: CartAddDTO) -> Ca
 async def product_data_1() -> ProductAddDTO:    
     return ProductAddDTO(
         title="Headphones",
-        price=999.99,
+        price=999.50,
         stock_qty=2,
     )
 
