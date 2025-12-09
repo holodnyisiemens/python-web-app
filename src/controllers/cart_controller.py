@@ -8,7 +8,7 @@ from services.cart_service import CartService
 class CartController(Controller):
     path = "/carts"
     
-    @get("/{cart_id:int}", status_code=HTTP_200_OK)
+    @get("/{cart_id:int}")
     async def get_cart_by_id(self, cart_service: CartService, cart_id: int) -> CartDTO:
         """Получить заказ по ID""" 
         return await cart_service.get_by_id(cart_id)
@@ -18,7 +18,7 @@ class CartController(Controller):
         """Создать новый заказ"""
         return await cart_service.create(data)
 
-    @delete("/{cart_id:int}", status_code=HTTP_200_OK)
+    @delete("/{cart_id:int}")
     async def delete_cart(self, cart_service: CartService, cart_id: int) -> None:
         """Удаление заказа"""
         return await cart_service.delete(cart_id)

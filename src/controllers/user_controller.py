@@ -20,7 +20,7 @@ class UserController(Controller):
         """Создать нового пользователя"""
         return await user_service.create(data)
 
-    @delete("/{user_id:int}", status_code=HTTP_200_OK)
+    @delete("/{user_id:int}")
     async def delete_user(self, user_service: UserService, user_id: int) -> None:
         """Удаление пользователя"""
         return await user_service.delete(user_id)
