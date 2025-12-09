@@ -82,3 +82,7 @@ class CartService:
         except:
             await self.cart_repo.session.rollback()
             raise HTTPException(status_code=400, detail=f"Error while add product to cart") 
+
+    async def get_all(self) -> list[CartDTO]:
+        return await self.cart_repo.get_all()
+    
