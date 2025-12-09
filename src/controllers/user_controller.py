@@ -11,8 +11,7 @@ from services.user_service import UserService
 
 class UserController(Controller):
     path = "/users"
-    dependencies = {"user_service": Provide(provide_user_service)}
-
+    
     @get("/{user_id:int}", status_code=HTTP_200_OK)
     async def get_user_by_id(self, user_service: UserService, user_id: int) -> UserDTO:
         """Получить пользователя по ID""" 

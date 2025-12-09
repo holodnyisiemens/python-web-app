@@ -2,7 +2,7 @@ from litestar import Litestar
 from litestar.di import Provide
 
 from controllers.user_controller import UserController
-from di.providers import provide_db_session, provide_user_repository
+from di.providers import provide_db_session, provide_user_repository, provide_user_service
 
 
 app = Litestar(
@@ -10,6 +10,7 @@ app = Litestar(
     dependencies={
         "db_session": Provide(provide_db_session),
         "user_repository": Provide(provide_user_repository),
+        "user_service": Provide(provide_user_service)
     },
 )
 
