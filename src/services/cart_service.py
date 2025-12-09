@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from litestar.exceptions import NotFoundException, HTTPException
 
 from repositories.cart_repository import CartRepository
@@ -16,7 +14,7 @@ class CartService:
         self.address_repo = address_repo
         self.product_repo = product_repo
 
-    async def get_by_id(self, cart_id: UUID) -> CartDTO:
+    async def get_by_id(self, cart_id: int) -> CartDTO:
         cart = await self.cart_repo.get_by_id(cart_id)
         if not cart:
             raise NotFoundException(detail=f"Cart with ID {cart_id} not found")
@@ -32,7 +30,7 @@ class CartService:
 
         return CartDTO.model_validate(cart)
 
-    async def delete(self, cart_id: UUID) -> None:
+    async def delete(self, cart_id: int) -> None:
         cart = await self.cart_repo.get_by_id(cart_id)
         if not cart:
             raise NotFoundException(detail=f"Cart with ID {cart_id} not found")
@@ -44,7 +42,7 @@ class CartService:
             await self.cart_repo.session.rollback()
             raise HTTPException(status_code=400, detail=f"Cart delete error")
 
-    async def update(self, cart_id: UUID, cart_data: CartUpdateDTO) -> CartDTO:
+    async def update(self, cart_id: int, cart_data: CartUpdateDTO) -> CartDTO:
         cart = await self.cart_repo.get_by_id(cart_id)
         if not cart:
             raise NotFoundException(detail=f"Cart with ID {cart_id} not found")
@@ -68,7 +66,7 @@ class CartService:
 
         return CartDTO.model_validate(cart)
     
-    async def add_product(self, cart_id: UUID, product_id: UUID, qty: int = 1) -> CartProductDTO:
+    async def add_product(self, cart_id: int, product_id: int, qty: int = 1) -> CartProductDTO:
         cart = await self.cart_repo.get_by_id(cart_id)
         if not cart:
             raise HTTPException(status_code=404, detail=f"Cart with ID {cart_id} not found")

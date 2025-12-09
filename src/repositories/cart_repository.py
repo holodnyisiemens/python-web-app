@@ -1,5 +1,4 @@
 from typing import Optional
-from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,7 +12,7 @@ class CartRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_by_id(self, cart_id: UUID) -> Optional[Cart]:
+    async def get_by_id(self, cart_id: int) -> Optional[Cart]:
         return await self.session.get(Cart, cart_id)
 
     async def create(self, cart_data: CartAddDTO) -> Cart:

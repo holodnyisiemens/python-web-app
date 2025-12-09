@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from litestar.exceptions import NotFoundException, HTTPException
 
 from repositories.product_repository import ProductRepository
@@ -10,7 +8,7 @@ class ProductService:
     def __init__(self, product_repo: ProductRepository):
         self.product_repo = product_repo
 
-    async def get_by_id(self, product_id: UUID) -> ProductDTO:
+    async def get_by_id(self, product_id: int) -> ProductDTO:
         product = await self.product_repo.get_by_id(product_id)
         if not product:
             raise NotFoundException(detail=f"Product with ID {product_id} not found")
@@ -26,7 +24,7 @@ class ProductService:
     
         return ProductDTO.model_validate(product)
 
-    async def delete(self, product_id: UUID) -> None:
+    async def delete(self, product_id: int) -> None:
         product = await self.product_repo.get_by_id(product_id)
         if not product:
             raise NotFoundException(detail=f"Product with ID {product_id} not found")
@@ -38,7 +36,7 @@ class ProductService:
             await self.product_repo.session.rollback()
             raise HTTPException(status_code=400, detail=f"Product delete error")
 
-    async def update(self, product_id: UUID, product_data: ProductUpdateDTO) -> ProductDTO:
+    async def update(self, product_id: int, product_data: ProductUpdateDTO) -> ProductDTO:
         product = await self.product_repo.get_by_id(product_id)
         if not product:
             raise NotFoundException(detail=f"Product with ID {product_id} not found")

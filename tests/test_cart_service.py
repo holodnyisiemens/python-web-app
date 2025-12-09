@@ -1,9 +1,7 @@
 import pytest
 from unittest.mock import Mock, AsyncMock
-from uuid import uuid4
 
 from schemas import CartAddDTO, CartDTO, ProductDTO
-from models import Cart
 from repositories.cart_repository import CartRepository
 from repositories.product_repository import ProductRepository
 from repositories.user_repository import UserRepository
@@ -25,7 +23,7 @@ class TestCartService:
         mock_cart_repo.session.rollback = AsyncMock()
 
         mock_cart = Mock(
-            id=uuid4(),
+            id=1,
             customer_id=cart_data_1.customer_id,
             delivery_address_id=cart_data_1.delivery_address_id,
             total_amount=0.0,
@@ -65,7 +63,7 @@ class TestCartService:
         mock_cart_repo.session.commit = AsyncMock()
         mock_cart_repo.session.rollback = AsyncMock()
 
-        cart_id = uuid4()
+        cart_id = 1
 
         fake_cart = Mock(
             id=cart_id,

@@ -1,5 +1,4 @@
 from typing import Optional
-from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,7 +11,7 @@ class ProductRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_by_id(self, product_id: UUID) -> Optional[Product]:
+    async def get_by_id(self, product_id: int) -> Optional[Product]:
         return await self.session.get(Product, product_id)
 
     async def create(self, product_data: ProductAddDTO) -> Product:

@@ -1,5 +1,4 @@
 from typing import Optional
-from uuid import UUID
 
 from litestar.exceptions import NotFoundException, HTTPException
 
@@ -11,7 +10,7 @@ class UserService:
     def __init__(self, user_repo: UserRepository):
         self.user_repo = user_repo
 
-    async def get_by_id(self, user_id: UUID) -> UserDTO:
+    async def get_by_id(self, user_id: int) -> UserDTO:
         user = await self.user_repo.get_by_id(user_id)
         if not user:
             raise NotFoundException(detail=f"User with ID {user_id} not found")
@@ -27,7 +26,7 @@ class UserService:
     
         return UserDTO.model_validate(user)
 
-    async def delete(self, user_id: UUID) -> None:
+    async def delete(self, user_id: int) -> None:
         user = await self.user_repo.get_by_id(user_id)
         if not user:
             raise NotFoundException(detail=f"User with ID {user_id} not found")
@@ -39,7 +38,7 @@ class UserService:
             await self.user_repo.session.rollback()
             raise HTTPException(status_code=400, detail=f"User delete error")
 
-    async def update(self, user_id: UUID, user_data: UserUpdateDTO) -> UserDTO:
+    async def update(self, user_id: int, user_data: UserUpdateDTO) -> UserDTO:
         user = await self.user_repo.get_by_id(user_id)
         if not user:
             raise NotFoundException(detail=f"User with ID {user_id} not found")

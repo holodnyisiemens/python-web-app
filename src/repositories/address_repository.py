@@ -1,5 +1,4 @@
 from typing import Optional
-from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,7 +11,7 @@ class AddressRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_by_id(self, address_id: UUID) -> Optional[Address]:
+    async def get_by_id(self, address_id: int) -> Optional[Address]:
         return await self.session.get(Address, address_id)
 
     async def create(self, address_data: AddressAddDTO) -> Address:
@@ -24,7 +23,7 @@ class AddressRepository:
         
         return address
 
-    async def delete(self, address_id: UUID) -> Optional[Address]:
+    async def delete(self, address_id: int) -> Optional[Address]:
         stmt = select(Address).where(Address.id == address_id)
         result = await self.session.execute(stmt)
         address = result.scalar_one_or_none()
@@ -34,7 +33,7 @@ class AddressRepository:
         await self.session.commit()
         return address
 
-    async def update(self, address_id: UUID, address_data: AddressUpdateDTO) -> Address:
+    async def update(self, address_id: int, address_data: AddressUpdateDTO) -> Address:
         stmt = select(Address).where(Address.id == address_id)
         result = await self.session.execute(stmt)
         address = result.scalar_one_or_none()

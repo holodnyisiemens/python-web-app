@@ -1,6 +1,5 @@
 import pytest
 from unittest.mock import Mock, AsyncMock
-from uuid import uuid4
 
 from schemas import UserAddDTO, UserDTO
 from repositories.user_repository import UserRepository
@@ -18,7 +17,7 @@ class TestUserService:
 
         # то, что вернёт create()
         mock_user_repo.create.return_value = UserDTO(
-            id=uuid4(),
+            id=1,
             username=user_data_1.username,
             email=user_data_1.email
         )
@@ -39,8 +38,7 @@ class TestUserService:
         mock_user_repo.session.commit = AsyncMock()
         mock_user_repo.session.rollback = AsyncMock()
 
-        user_id = uuid4()
-
+        user_id = 1
         fake_user = Mock(
             id=user_id,
             username=user_data_1.username, 

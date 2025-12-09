@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
-from uuid import UUID
 
 
 class BaseDTO(BaseModel):
@@ -16,7 +15,7 @@ class UserAddDTO(BaseDTO):
 
 
 class UserDTO(UserAddDTO):
-    id: UUID
+    id: int
 
 
 class UserUpdateDTO(BaseDTO):
@@ -36,7 +35,7 @@ class UserRelDTO(UserDTO):
 
 
 class AddressAddDTO(BaseDTO):
-    user_id: UUID
+    user_id: int
     street: str
     city: str
     state: Optional[str] = None
@@ -46,11 +45,11 @@ class AddressAddDTO(BaseDTO):
 
 
 class AddressDTO(AddressAddDTO):
-    id: UUID
+    id: int
 
 
 class AddressUpdateDTO(BaseDTO):
-    user_id: Optional[UUID] = None
+    user_id: Optional[int] = None
     street: Optional[str] = None
     city: Optional[str] = None
     state: Optional[str] = None
@@ -77,7 +76,7 @@ class ProductAddDTO(BaseModel):
 
 
 class ProductDTO(ProductAddDTO):
-    id: UUID
+    id: int
 
 
 class ProductUpdateDTO(BaseDTO):
@@ -98,18 +97,18 @@ class ProductRelDTO(ProductDTO):
 
 
 class CartAddDTO(BaseDTO):
-    customer_id: UUID
-    delivery_address_id: UUID
+    customer_id: int
+    delivery_address_id: int
 
 
 class CartDTO(CartAddDTO):
-    id: UUID
+    id: int
     total_amount: float
 
 
 class CartUpdateDTO(BaseDTO):
-    customer_id: Optional[UUID] = None
-    delivery_address_id: Optional[UUID] = None
+    customer_id: Optional[int] = None
+    delivery_address_id: Optional[int] = None
 
     model_config = ConfigDict(
         from_attributes=True,
@@ -124,8 +123,8 @@ class CartRelDTO(CartDTO):
 
 
 class CartProductAddDTO(BaseDTO):
-    cart_id: UUID
-    product_id: UUID
+    cart_id: int
+    product_id: int
     quantity: int = 1
 
 

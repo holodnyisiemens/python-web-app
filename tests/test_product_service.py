@@ -1,6 +1,5 @@
 import pytest
 from unittest.mock import Mock, AsyncMock
-from uuid import uuid4
 
 from schemas import ProductAddDTO, ProductDTO
 from repositories.product_repository import ProductRepository
@@ -25,7 +24,7 @@ class TestProductService:
 
         # то, что вернёт create()
         mock_product_repo.create.return_value = {
-            "id": uuid4(),
+            "id": 1,
             "title": "example",
             "price": 1000,
             "stock_qty": 10,
@@ -47,7 +46,7 @@ class TestProductService:
         mock_product_repo.session.commit = AsyncMock()
         mock_product_repo.session.rollback = AsyncMock()
 
-        product_id = uuid4()
+        product_id = 1
 
         fake_product = Mock(id=product_id, title="example", price=1000, stock_qty=10)
         mock_product_repo.get_by_id.return_value = fake_product

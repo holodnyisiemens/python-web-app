@@ -1,5 +1,4 @@
 from typing import Optional
-from uuid import UUID
 
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,7 +11,7 @@ class UserRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_by_id(self, user_id: UUID) -> Optional[User]:
+    async def get_by_id(self, user_id: int) -> Optional[User]:
         return await self.session.get(User, user_id)
 
     async def create(self, user_data: UserAddDTO) -> User:

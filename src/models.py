@@ -1,7 +1,6 @@
 from datetime import datetime
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from uuid import UUID, uuid4
 
 from database import Base
 
@@ -9,9 +8,8 @@ from database import Base
 class User(Base):
     __tablename__ = "users"
 
-    id: Mapped[UUID] = mapped_column(
+    id: Mapped[int] = mapped_column(
         primary_key=True,
-        default=uuid4,
     )
 
     username: Mapped[str] = mapped_column(
@@ -38,12 +36,11 @@ class User(Base):
 class Address(Base):
     __tablename__ = "addresses"
 
-    id: Mapped[UUID] = mapped_column(
+    id: Mapped[int] = mapped_column(
         primary_key=True,
-        default=uuid4,
     )
 
-    user_id: Mapped[UUID] = mapped_column(
+    user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE")
     )
 
@@ -67,9 +64,8 @@ class Address(Base):
 class Product(Base):
     __tablename__ = "products"
 
-    id: Mapped[UUID] = mapped_column(
+    id: Mapped[int] = mapped_column(
         primary_key=True,
-        default=uuid4,
     )
 
     title: Mapped[str] = mapped_column(
@@ -96,16 +92,15 @@ class Product(Base):
 class Cart(Base):
     __tablename__ = "carts"
 
-    id: Mapped[UUID] = mapped_column(
+    id: Mapped[int] = mapped_column(
         primary_key=True,
-        default=uuid4,
     )
 
-    customer_id: Mapped[UUID] = mapped_column(
+    customer_id: Mapped[int] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE")
     )
 
-    delivery_address_id: Mapped[UUID] = mapped_column(
+    delivery_address_id: Mapped[int] = mapped_column(
         ForeignKey("addresses.id", ondelete="CASCADE")
     )
 
@@ -132,12 +127,12 @@ class Cart(Base):
 class CartProduct(Base):
     __tablename__ = "cart_product"
 
-    cart_id: Mapped[UUID] = mapped_column(
+    cart_id: Mapped[int] = mapped_column(
         ForeignKey("carts.id", ondelete="CASCADE"),
         primary_key=True,
     )
 
-    product_id: Mapped[UUID] = mapped_column(
+    product_id: Mapped[int] = mapped_column(
         ForeignKey("products.id", ondelete="CASCADE"),
         primary_key=True,
     )

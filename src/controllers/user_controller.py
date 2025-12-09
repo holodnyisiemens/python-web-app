@@ -1,5 +1,4 @@
 from typing import Optional
-from uuid import UUID
 
 from litestar import Controller, get, post, put, delete
 from litestar.di import Provide
@@ -14,29 +13,27 @@ class UserController(Controller):
     path = "/users"
     dependencies = {"user_service": Provide(provide_user_service)}
 
-    @get("/{user_id:uuid}")
-    async def get_user_by_id(self, user_service: UserService, user_id: UUID) -> UserDTO:
-        """Получить пользователя по ID"""
-        user = await user_service.get_by_id(user_id)
-        return user
+    @get("/{user_id:int}", status_code=HTTP_200_OK)
+    async def get_user_by_id(self, user_service: UserService, user_id: int) -> UserDTO:
+        """Получить пользователя по ID""" 
+        return await user_service.get_by_id(user_id)
 
     @post()
     async def create_user(self, user_service: UserService, data: UserAddDTO) -> UserDTO:
         """Создать нового пользователя"""
-        user = await user_service.create(data)
-        return user
+        return await user_service.create(data)
 
-    @delete("/{user_id:uuid}", status_code=HTTP_200_OK)
-    async def delete_user(self, user_service: UserService, user_id: UUID) -> UserDTO | None:
+    @delete("/{user_id:int}", status_code=HTTP_200_OK)
+    async def delete_user(self, user_service: UserService, user_id: int) -> UserDTO | None:
         """Удаление пользователя"""
         return await user_service.delete(user_id)
 
-    @put("/{user_id:uuid}")
-    async def update_user(self, user_service: UserService, user_id: UUID, data: UserUpdateDTO) -> UserDTO:
+    @put("/{user_id:int}")
+    async def update_user(self, user_service: UserService, user_id: int, data: UserUpdateDTO) -> UserDTO:
         """Обновление атрибутов пользователя"""
         return await user_service.update(user_id, data)
 
-    @get()
+    @get("/", status_code=HTTP_200_OK)
     async def get_all_users(self, user_service: UserService) -> dict:
         """Получить всех пользователей"""
         users = await user_service.get_by_filter()
@@ -63,9 +60,3 @@ class UserController(Controller):
             filters["email"] = email
             
         return await user_service.get_by_filter(count, page, **filters)
-
-    @get("/{email:str}")
-    async def get_user_by_email(self, user_service: UserService, email: str) -> UserDTO:
-        """Получить пользователя по email"""
-        user = await user_service.get_by_email(email)
-        return user
