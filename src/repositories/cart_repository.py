@@ -45,18 +45,20 @@ class CartRepository:
         stmt = (
             select(Cart)
             .where(Cart.id == cart.id)
-            .options(selectinload(Cart.cart_items))
+            .options(
+                selectinload(Cart.cart_items).selectinload(CartProduct.product)
+            )
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
     async def add_product(self, cart: Cart, product: Product, qty: int = 1) -> CartProduct:
-        # ищем, есть ли уже запись в cart_product
         cart = await self.get_cart_with_items(cart)
 
         for item in cart.cart_items:
             if item.product_id == product.id:
                 item.quantity += qty
+                cart.total_amount += qty * product.price
                 await self.session.flush()
                 return item
         
@@ -66,9 +68,12 @@ class CartRepository:
             quantity=qty,
         )
 
+        cart.total_amount += qty * product.price
         cart.cart_items.append(new_item)
         
-        self.session.add(new_item)
+        # необязательно, если cart_items настроен с cascade="all, delete-orphan"
+        # self.session.add(new_item)
+
         await self.session.flush()
         return new_item
 

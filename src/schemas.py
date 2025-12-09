@@ -104,6 +104,7 @@ class CartAddDTO(BaseDTO):
 
 class CartDTO(CartAddDTO):
     id: UUID
+    total_amount: float
 
 
 class CartUpdateDTO(BaseDTO):

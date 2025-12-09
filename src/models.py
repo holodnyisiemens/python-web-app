@@ -109,6 +109,8 @@ class Cart(Base):
         ForeignKey("addresses.id", ondelete="CASCADE")
     )
 
+    total_amount: Mapped[float] = mapped_column(nullable=False, default=0.0)
+
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(
         default=datetime.now,
