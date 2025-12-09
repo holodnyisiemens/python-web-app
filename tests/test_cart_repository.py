@@ -34,17 +34,20 @@ class TestCartRepository:
 
     @pytest.mark.asyncio
     async def test_add_product(self, cart_repository: CartRepository, cart_1: CartDTO, product_1: ProductDTO):
-
         cart_item = await cart_repository.add_product(cart_1, product_1, qty=2)
+        cart = await cart_repository.get_by_id(cart_1.id)
 
         assert cart_item.cart_id == cart_1.id
         assert cart_item.product_id == product_1.id
         assert cart_item.quantity == 2
+        assert cart.total_amount == product_1.price * cart_item.quantity
 
     @pytest.mark.asyncio
     async def test_add_same_product_multiple_times(self, cart_repository: CartRepository, cart_1: CartDTO, product_1: ProductDTO):
         # добавляем продукт первый раз
         cart_item_1 = await cart_repository.add_product(cart_1, product_1, qty=2)
+        cart = await cart_repository.get_by_id(cart_1.id)
+
         assert cart_item_1.quantity == 2
 
         # добавляем тот же продукт ещё раз
@@ -53,7 +56,8 @@ class TestCartRepository:
         assert cart_item_2.product_id == product_1.id
 
         assert cart_item_2.quantity == 5
-        assert cart_item_1 is cart_item_2
+        assert cart_item_1 == cart_item_2
+        assert cart.total_amount == 5 * product_1.price
 
     @pytest.mark.asyncio
     async def test_get_all_carts(self, cart_repository: CartRepository, cart_1: CartDTO, cart_2: CartDTO):
