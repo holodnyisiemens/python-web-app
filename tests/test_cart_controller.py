@@ -1,8 +1,8 @@
 import pytest
 
-from litestar.status_codes import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_200_OK
+from litestar.status_codes import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_200_OK, HTTP_400_BAD_REQUEST
 
-from schemas import CartDTO, CartAddDTO, UserDTO, AddressDTO
+from schemas import CartDTO, CartAddDTO, UserDTO, AddressDTO, CartProductDTO
 
 
 class TestCartController:
@@ -114,3 +114,36 @@ class TestCartController:
         assert data[1]["total_amount"] == 200.0
 
         mock_cart_service.get_all.assert_awaited_once_with()
+
+    @pytest.mark.asyncio
+    async def test_add_product_to_cart_success(
+        self,
+        client,
+        mock_cart_service,
+    ):
+        cart_id = 1
+        product_id = 42
+        quantity = 3
+
+        payload = {
+            "cart_id": cart_id,
+            "product_id": product_id,
+            "quantity": quantity,
+        }
+
+        expected_item = CartProductDTO(
+            cart_id=cart_id,
+            product_id=product_id,
+            quantity=quantity,
+        )
+
+        mock_cart_service.add_product.return_value = expected_item
+
+        response = await client.post(f"/carts/{cart_id}/items", json=payload)
+
+        assert response.status_code == HTTP_201_CREATED
+        data = response.json()
+
+        assert data["cart_id"] == cart_id
+        assert data["product_id"] == product_id
+        assert data["quantity"] == quantity
