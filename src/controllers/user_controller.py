@@ -1,10 +1,8 @@
 from typing import Optional
 
 from litestar import Controller, get, post, put, delete
-from litestar.di import Provide
 from litestar.status_codes import HTTP_200_OK
 
-from di.providers import provide_user_service
 from schemas import UserDTO, UserAddDTO, UserUpdateDTO
 from services.user_service import UserService
 
@@ -12,7 +10,7 @@ from services.user_service import UserService
 class UserController(Controller):
     path = "/users"
     
-    @get("/{user_id:int}", status_code=HTTP_200_OK)
+    @get("/{user_id:int}")
     async def get_user_by_id(self, user_service: UserService, user_id: int) -> UserDTO:
         """Получить пользователя по ID""" 
         return await user_service.get_by_id(user_id)
@@ -23,7 +21,7 @@ class UserController(Controller):
         return await user_service.create(data)
 
     @delete("/{user_id:int}", status_code=HTTP_200_OK)
-    async def delete_user(self, user_service: UserService, user_id: int) -> UserDTO | None:
+    async def delete_user(self, user_service: UserService, user_id: int) -> None:
         """Удаление пользователя"""
         return await user_service.delete(user_id)
 
@@ -32,7 +30,7 @@ class UserController(Controller):
         """Обновление атрибутов пользователя"""
         return await user_service.update(user_id, data)
 
-    @get("/", status_code=HTTP_200_OK)
+    @get("/")
     async def get_all_users(self, user_service: UserService) -> dict:
         """Получить всех пользователей"""
         users = await user_service.get_by_filter()
