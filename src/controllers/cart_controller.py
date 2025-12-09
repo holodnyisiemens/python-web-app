@@ -1,7 +1,6 @@
 from litestar import Controller, get, post, put, delete
-from litestar.status_codes import HTTP_200_OK
 
-from schemas import CartDTO, CartAddDTO, CartUpdateDTO
+from schemas import CartDTO, CartAddDTO, CartUpdateDTO, CartProductDTO, CartProductAddDTO
 from services.cart_service import CartService
 
 
@@ -32,3 +31,17 @@ class CartController(Controller):
     async def get_all_carts(self, cart_service: CartService) -> list[CartDTO]:
         """Получить всех пользователей"""
         return await cart_service.get_all()
+
+    @post("/{cart_id:int}/items")
+    async def add_product_to_cart(
+        self,
+        cart_service: CartService,
+        cart_id: int,
+        data: CartProductAddDTO,
+    ) -> CartProductDTO:
+        """Добавить товар в корзину"""
+        return await cart_service.add_product(
+            cart_id=cart_id,
+            product_id=data.product_id,
+            qty=data.quantity,
+        )
