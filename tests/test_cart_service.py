@@ -2,7 +2,8 @@ import pytest
 from unittest.mock import Mock, AsyncMock
 from uuid import uuid4
 
-from schemas import CartAddDTO, CartDTO
+from schemas import CartAddDTO, CartDTO, ProductDTO
+from models import Cart
 from repositories.cart_repository import CartRepository
 from repositories.product_repository import ProductRepository
 from repositories.user_repository import UserRepository
@@ -12,42 +13,53 @@ from services.cart_service import CartService
 
 class TestCartService:
     @pytest.mark.asyncio
-    async def test_create_cart(self, cart_data_1: CartDTO):
+    async def test_create_cart_success(self, cart_data_1: CartAddDTO, product_1: ProductDTO, product_2: ProductDTO):
         # мокаем репозиторий и объекты в нем
         mock_cart_repo = AsyncMock(spec=CartRepository)
         mock_user_repo = AsyncMock(spec=UserRepository)
         mock_address_repo = AsyncMock(spec=AddressRepository)
+        mock_product_repo = AsyncMock(spec=ProductRepository)
 
         mock_cart_repo.session = Mock()
         mock_cart_repo.session.commit = AsyncMock()
         mock_cart_repo.session.rollback = AsyncMock()
 
-        # то, что вернёт create()
-        mock_cart_repo.create.return_value = CartDTO(
+        mock_cart = Mock(
             id=uuid4(),
             customer_id=cart_data_1.customer_id,
             delivery_address_id=cart_data_1.delivery_address_id,
+            total_amount=0.0,
         )
+
+        mock_cart_repo.create = AsyncMock(return_value=mock_cart)
+        mock_cart_repo.get_cart_with_items = AsyncMock(return_value=mock_cart)
 
         cart_service = CartService(
             cart_repo=mock_cart_repo,
             user_repo=mock_user_repo,
             address_repo=mock_address_repo,
+            product_repo=mock_product_repo,
         )
         
-        result = await cart_service.create(cart_data_1)
-
-        # проверка что для асинхронного метода create() был всего 1 await и с указанным объектом
+        cart_dto = await cart_service.create(cart_data_1)
+        # проверка, что для асинхронного метода create() был всего 1 await и с указанным объектом
         mock_cart_repo.create.assert_awaited_once_with(cart_data_1)
+        # проверка, что коммит был вызван 1 раз
         mock_cart_repo.session.commit.assert_awaited_once()
-        assert isinstance(result, CartDTO)
-        assert result.customer_id == cart_data_1.customer_id
+
+        await cart_service.add_product(cart_dto.id, product_1.id)
+        await cart_service.add_product(cart_dto.id, product_2.id, qty=2)
+
+        assert isinstance(cart_dto, CartDTO)
+        assert cart_dto.customer_id == cart_data_1.customer_id
+        assert cart_dto.delivery_address_id == cart_data_1.delivery_address_id
 
     @pytest.mark.asyncio
     async def test_delete_cart(self, cart_data_1: CartDTO):
         mock_cart_repo = AsyncMock(spec=CartRepository)
         mock_user_repo = AsyncMock(spec=UserRepository)
         mock_address_repo = AsyncMock(spec=AddressRepository)
+        mock_product_repo = AsyncMock(spec=ProductRepository)
 
         mock_cart_repo.session = Mock()
         mock_cart_repo.session.commit = AsyncMock()
@@ -65,7 +77,13 @@ class TestCartService:
 
         mock_cart_repo.delete.return_value = None
 
-        cart_service = CartService(cart_repo=mock_cart_repo, user_repo=mock_user_repo, address_repo=mock_address_repo)
+        cart_service = CartService(
+            cart_repo=mock_cart_repo,
+            user_repo=mock_user_repo,
+            address_repo=mock_address_repo,
+            product_repo=mock_product_repo,
+        )
+        
         result = await cart_service.delete(cart_id)
 
         assert result is None
