@@ -1,12 +1,14 @@
 import pytest
 
-from schemas import ProductAddDTO, ProductUpdateDTO, ProductDTO
 from repositories.product_repository import ProductRepository
+from schemas import ProductAddDTO, ProductDTO, ProductUpdateDTO
 
 
 class TestProductRepository:
     @pytest.mark.asyncio
-    async def test_create_product(self, product_repository: ProductRepository, product_data_1: ProductAddDTO):
+    async def test_create_product(
+        self, product_repository: ProductRepository, product_data_1: ProductAddDTO
+    ):
         product = await product_repository.create(product_data_1)
 
         assert product.id is not None
@@ -16,13 +18,15 @@ class TestProductRepository:
         assert product.stock_qty == product_data_1.stock_qty
 
     @pytest.mark.asyncio
-    async def test_update_product(self, product_repository: ProductRepository, product_1: ProductDTO):
+    async def test_update_product(
+        self, product_repository: ProductRepository, product_1: ProductDTO
+    ):
         new_product_data = ProductUpdateDTO(title="Updated")
 
         await product_repository.update(product_1, new_product_data)
 
         updated_product = await product_repository.get_by_id(product_1.id)
-        
+
         assert updated_product.title == new_product_data.title
 
         assert updated_product.id == product_1.id
@@ -31,14 +35,21 @@ class TestProductRepository:
         assert updated_product.stock_qty == product_1.stock_qty
 
     @pytest.mark.asyncio
-    async def test_delete_product(self, product_repository: ProductRepository, product_1: ProductDTO):
+    async def test_delete_product(
+        self, product_repository: ProductRepository, product_1: ProductDTO
+    ):
         await product_repository.delete(product_1)
 
         found_product = await product_repository.get_by_id(product_1.id)
         assert found_product is None
 
     @pytest.mark.asyncio
-    async def test_get_all_products(self, product_repository: ProductRepository, product_1: ProductDTO, product_2: ProductDTO):
+    async def test_get_all_products(
+        self,
+        product_repository: ProductRepository,
+        product_1: ProductDTO,
+        product_2: ProductDTO,
+    ):
         products_list = await product_repository.get_all()
 
         product_titles = [product.title for product in products_list]

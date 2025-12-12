@@ -1,13 +1,19 @@
 import pytest
+from litestar.status_codes import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
+)
 
-from litestar.status_codes import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_200_OK, HTTP_400_BAD_REQUEST
-
-from schemas import CartDTO, CartAddDTO, UserDTO, AddressDTO, CartProductDTO
+from schemas import AddressDTO, CartAddDTO, CartDTO, CartProductDTO, UserDTO
 
 
 class TestCartController:
     @pytest.mark.asyncio
-    async def test_get_cart_by_id(self, mock_cart_service, client, cart_data_1: CartAddDTO):        
+    async def test_get_cart_by_id(
+        self, mock_cart_service, client, cart_data_1: CartAddDTO
+    ):
         cart_id = 1
         expected_cart = CartDTO(
             id=cart_id,
@@ -30,7 +36,9 @@ class TestCartController:
         mock_cart_service.get_by_id.assert_awaited_once_with(cart_id)
 
     @pytest.mark.asyncio
-    async def test_create_cart(self, client, mock_cart_service, cart_data_1: CartAddDTO):
+    async def test_create_cart(
+        self, client, mock_cart_service, cart_data_1: CartAddDTO
+    ):
         cart_id = 1
         expected_cart = CartDTO(
             id=cart_id,
@@ -62,7 +70,9 @@ class TestCartController:
         mock_cart_service.delete.assert_awaited_once_with(cart_id)
 
     @pytest.mark.asyncio
-    async def test_update_cart(self, client, mock_cart_service, user_2: UserDTO, address_2: AddressDTO):
+    async def test_update_cart(
+        self, client, mock_cart_service, user_2: UserDTO, address_2: AddressDTO
+    ):
         cart_id = 3
         update_data = {
             "customer_id": user_2.id,

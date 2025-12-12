@@ -1,10 +1,10 @@
+from unittest.mock import AsyncMock, Mock
+
 import pytest
-from unittest.mock import Mock, AsyncMock
 
-from schemas import ProductAddDTO, ProductDTO
 from repositories.product_repository import ProductRepository
+from schemas import ProductAddDTO, ProductDTO
 from services.product_service import ProductService
-
 
 product_data = ProductAddDTO(
     title="example",

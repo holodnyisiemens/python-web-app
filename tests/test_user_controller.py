@@ -1,11 +1,13 @@
 import pytest
 
-from schemas import UserDTO, UserAddDTO
+from schemas import UserAddDTO, UserDTO
 
 
 class TestUserController:
     @pytest.mark.asyncio
-    async def test_get_user_by_id(self, mock_user_service, client, user_data_1: UserAddDTO):        
+    async def test_get_user_by_id(
+        self, mock_user_service, client, user_data_1: UserAddDTO
+    ):
         user_id = 1
         expected_user = UserDTO(
             id=user_id,

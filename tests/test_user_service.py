@@ -1,8 +1,9 @@
-import pytest
-from unittest.mock import Mock, AsyncMock
+from unittest.mock import AsyncMock, Mock
 
-from schemas import UserAddDTO, UserDTO
+import pytest
+
 from repositories.user_repository import UserRepository
+from schemas import UserAddDTO, UserDTO
 from services.user_service import UserService
 
 
@@ -17,9 +18,7 @@ class TestUserService:
 
         # то, что вернёт create()
         mock_user_repo.create.return_value = UserDTO(
-            id=1,
-            username=user_data_1.username,
-            email=user_data_1.email
+            id=1, username=user_data_1.username, email=user_data_1.email
         )
 
         user_service = UserService(user_repo=mock_user_repo)
@@ -41,7 +40,7 @@ class TestUserService:
         user_id = 1
         fake_user = Mock(
             id=user_id,
-            username=user_data_1.username, 
+            username=user_data_1.username,
             email=user_data_1.email,
         )
 

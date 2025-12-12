@@ -1,12 +1,14 @@
 import pytest
 
-from schemas import UserAddDTO, UserUpdateDTO, UserDTO
 from repositories.user_repository import UserRepository
+from schemas import UserAddDTO, UserDTO, UserUpdateDTO
 
 
 class TestUserRepository:
     @pytest.mark.asyncio
-    async def test_create_user(self, user_repository: UserRepository, user_data_1: UserAddDTO):
+    async def test_create_user(
+        self, user_repository: UserRepository, user_data_1: UserAddDTO
+    ):
         user = await user_repository.create(user_data_1)
 
         assert user.id is not None
@@ -15,7 +17,9 @@ class TestUserRepository:
         assert user.description == user_data_1.description
 
     @pytest.mark.asyncio
-    async def test_get_user_by_email(self, user_repository: UserRepository, user_1: UserDTO):
+    async def test_get_user_by_email(
+        self, user_repository: UserRepository, user_1: UserDTO
+    ):
         found_user = await user_repository.get_by_email(user_1.email)
 
         assert found_user.id is not None
@@ -30,7 +34,7 @@ class TestUserRepository:
         await user_repository.update(user_1, new_user_data)
 
         updated_user = await user_repository.get_by_email(user_1.email)
-        
+
         assert updated_user.username == new_user_data.username
 
         assert updated_user.id == user_1.id
@@ -45,7 +49,9 @@ class TestUserRepository:
         assert found_user is None
 
     @pytest.mark.asyncio
-    async def test_get_all_users(self, user_repository: UserRepository, user_1: UserDTO, user_2: UserDTO):
+    async def test_get_all_users(
+        self, user_repository: UserRepository, user_1: UserDTO, user_2: UserDTO
+    ):
         users_list = await user_repository.get_by_filter()
 
         user_emails = [user.email for user in users_list]
