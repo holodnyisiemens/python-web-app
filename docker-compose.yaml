@@ -15,29 +15,22 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-
-  migrations:
-    container_name: python-web-app-migrations
-    build: .
-    image: python-web-app-migrations:latest
-    pull_policy: never
-    command: alembic upgrade head
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: on-failure
+    restart: unless-stopped
 
   python-web-app:
     container_name: python-web-app
     build: .
     image: python-web-app:latest
     pull_policy: never
-    command: python src/main.py
+    env_file:
+      - .env
     depends_on:
-      - migrations
+      db:
+        condition: service_healthy
     ports:
       - "8888:8888"
     restart: unless-stopped
+    command: python src/main.py
 
 volumes:
   db_data:
