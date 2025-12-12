@@ -9,3 +9,6 @@ README.md
 pytest.ini
 .pytest_cache
 tests
+.pre-commit-config.yaml
+.git
+.pylintrc
