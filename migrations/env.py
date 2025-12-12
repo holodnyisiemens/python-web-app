@@ -23,7 +23,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL_PSYCOPG)
+config.set_main_option("sqlalchemy.url", settings.database_url_psycopg)
 target_metadata = Base.metadata
 
 
