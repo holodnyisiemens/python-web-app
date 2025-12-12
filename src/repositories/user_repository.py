@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models import User
@@ -20,7 +20,7 @@ class UserRepository:
 
         await self.session.flush()
         await self.session.refresh(user)
-        
+
         return user
 
     async def delete(self, user: User) -> None:
@@ -37,20 +37,22 @@ class UserRepository:
         await self.session.refresh(user)
 
         return user
-    
+
     async def get_user_count(self) -> int:
         stmt = select(func.count(User.id))
         result = await self.session.execute(stmt)
         return result.scalar_one()
-    
-    async def get_by_filter(self, count: Optional[int] = None, page: int = 1, **kwargs) -> list[User]:
+
+    async def get_by_filter(
+        self, count: Optional[int] = None, page: int = 1, **kwargs
+    ) -> list[User]:
         stmt = select(User)
-        
+
         # фильтры
         for field, value in kwargs.items():
             if hasattr(User, field) and value is not None:
                 stmt = stmt.where(getattr(User, field) == value)
-        
+
         # пагинация если указан count
         if count:
             stmt = stmt.offset((page - 1) * count).limit(count)

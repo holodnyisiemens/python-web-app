@@ -2,8 +2,14 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from database import session_factory
-from models import Address, User, Cart, Product, CartProduct
-from schemas import UserAddDTO, AddressAddDTO, CartAddDTO, ProductAddDTO, CartProductAddDTO
+from models import Address, Cart, CartProduct, Product, User
+from schemas import (
+    AddressAddDTO,
+    CartAddDTO,
+    CartProductAddDTO,
+    ProductAddDTO,
+    UserAddDTO,
+)
 
 
 class ORM:
@@ -15,8 +21,7 @@ class ORM:
             session.commit()
             session.refresh(user)
             return user
-    
-    
+
     @staticmethod
     def insert_address(data: AddressAddDTO):
         with session_factory() as session:
@@ -26,18 +31,13 @@ class ORM:
             session.refresh(address)
             return address
 
-
     @staticmethod
     def select_users_with_addresses():
         with session_factory() as session:
-            query = (
-                select(User)
-                .options(selectinload(User.addresses))
-            )
+            query = select(User).options(selectinload(User.addresses))
             res = session.execute(query)
             result = res.unique().scalars().all()
             return result
-
 
     @staticmethod
     def insert_product(data: ProductAddDTO):
@@ -48,7 +48,6 @@ class ORM:
             session.refresh(product)
             return product
 
-    
     @staticmethod
     def insert_cart(data: CartAddDTO):
         with session_factory() as session:
@@ -57,8 +56,7 @@ class ORM:
             session.commit()
             session.refresh(cart)
             return cart
-        
-    
+
     @staticmethod
     def insert_cart_product(data: CartProductAddDTO):
         with session_factory() as session:
@@ -68,14 +66,10 @@ class ORM:
             session.refresh(order_position)
             return order_position
 
-
     @staticmethod
     def select_carts_with_products():
         with session_factory() as session:
-            query = (
-                select(Cart)
-                .options(selectinload(Cart.products))
-            )
+            query = select(Cart).options(selectinload(Cart.products))
             res = session.execute(query)
             result = res.unique().scalars().all()
             return result

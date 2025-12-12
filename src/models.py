@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -26,8 +27,7 @@ class User(Base):
 
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now,
-        onupdate=datetime.now
+        default=datetime.now, onupdate=datetime.now
     )
 
     addresses: Mapped[list["Address"]] = relationship(back_populates="user")
@@ -40,9 +40,7 @@ class Address(Base):
         primary_key=True,
     )
 
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
-    )
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
 
     street: Mapped[str] = mapped_column(nullable=False)
     city: Mapped[str] = mapped_column(nullable=False)
@@ -68,10 +66,7 @@ class Product(Base):
         primary_key=True,
     )
 
-    title: Mapped[str] = mapped_column(
-        nullable=False,
-        unique=True
-    )
+    title: Mapped[str] = mapped_column(nullable=False, unique=True)
 
     description: Mapped[str] = mapped_column(nullable=True)
     price: Mapped[float] = mapped_column(nullable=False)
@@ -96,9 +91,7 @@ class Cart(Base):
         primary_key=True,
     )
 
-    customer_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE")
-    )
+    customer_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
 
     delivery_address_id: Mapped[int] = mapped_column(
         ForeignKey("addresses.id", ondelete="CASCADE")
@@ -143,7 +136,7 @@ class CartProduct(Base):
         back_populates="cart_items",
         overlaps="products,carts",
     )
-    
+
     product: Mapped["Product"] = relationship(
         overlaps="products,carts",
     )

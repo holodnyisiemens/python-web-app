@@ -36,7 +36,7 @@ class ProductRepository:
         await self.session.refresh(product)
 
         return product
-    
+
     async def get_all(self) -> list[Product]:
         stmt = select(Product)
         result = await self.session.execute(stmt)

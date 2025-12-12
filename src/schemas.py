@@ -1,5 +1,6 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class BaseDTO(BaseModel):
@@ -56,7 +57,7 @@ class AddressUpdateDTO(BaseDTO):
     zip_code: Optional[str] = None
     country: Optional[str] = None
     is_primary: Optional[bool] = None
-    
+
     model_config = ConfigDict(
         from_attributes=True,
         # ValidationError for extra attributes

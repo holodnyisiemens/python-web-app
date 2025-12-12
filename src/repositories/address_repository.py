@@ -20,7 +20,7 @@ class AddressRepository:
 
         await self.session.flush()
         await self.session.refresh(address)
-        
+
         return address
 
     async def delete(self, address_id: int) -> Optional[Address]:
@@ -41,7 +41,7 @@ class AddressRepository:
             return None
         # обновляем только переданные поля
         update_data = address_data.model_dump(exclude_unset=True)
-        
+
         for field, value in update_data.items():
             setattr(address, field, value)
 

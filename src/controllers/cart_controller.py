@@ -1,15 +1,21 @@
-from litestar import Controller, get, post, put, delete
+from litestar import Controller, delete, get, post, put
 
-from schemas import CartDTO, CartAddDTO, CartUpdateDTO, CartProductDTO, CartProductAddDTO
+from schemas import (
+    CartAddDTO,
+    CartDTO,
+    CartProductAddDTO,
+    CartProductDTO,
+    CartUpdateDTO,
+)
 from services.cart_service import CartService
 
 
 class CartController(Controller):
     path = "/carts"
-    
+
     @get("/{cart_id:int}")
     async def get_cart_by_id(self, cart_service: CartService, cart_id: int) -> CartDTO:
-        """Получить заказ по ID""" 
+        """Получить заказ по ID"""
         return await cart_service.get_by_id(cart_id)
 
     @post()
@@ -23,7 +29,9 @@ class CartController(Controller):
         return await cart_service.delete(cart_id)
 
     @put("/{cart_id:int}")
-    async def update_cart(self, cart_service: CartService, cart_id: int, data: CartUpdateDTO) -> CartDTO:
+    async def update_cart(
+        self, cart_service: CartService, cart_id: int, data: CartUpdateDTO
+    ) -> CartDTO:
         """Обновление параметров заказа"""
         return await cart_service.update(cart_id, data)
 
