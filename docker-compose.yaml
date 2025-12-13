@@ -31,7 +31,19 @@ services:
       - "8888:8888"
     restart: unless-stopped
     command: python src/main.py
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=local
+    volumes:
+      - rabbitmq_data:/data
 
 volumes:
   db_data:
     name: "db_data"
+  rabbitmq_data:
+    name: "rabbitmq_data"
