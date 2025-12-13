@@ -33,6 +33,7 @@ services:
     command: python src/main.py
   
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3-management
     ports:
       - 5672:5672
