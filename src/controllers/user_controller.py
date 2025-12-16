@@ -1,7 +1,6 @@
 from typing import Optional
 
 from litestar import Controller, delete, get, post, put
-from litestar.status_codes import HTTP_200_OK
 
 from src.schemas import UserAddDTO, UserDTO, UserUpdateDTO
 from src.services.user_service import UserService
