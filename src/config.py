@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     RABBIT_PASSWORD: SecretStr
     RABBIT_VHOST: str = "/"
 
+    REDIS_HOST: str
+    REDIS_PORT: int
+    REDIS_DB: int
+
     @property
     def database_url_asyncpg(self):
         return (
