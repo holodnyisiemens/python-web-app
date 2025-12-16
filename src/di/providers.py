@@ -46,7 +46,6 @@ async def provide_cart_service(
     user_repo: UserRepository,
     address_repo: AddressRepository,
     product_repo: ProductRepository,
-    redis: Redis,
 ) -> CartService:
     """Провайдер сервиса корзины"""
-    return CartService(cart_repo, user_repo, address_repo, product_repo, redis)
+    return CartService(cart_repo, user_repo, address_repo, product_repo)

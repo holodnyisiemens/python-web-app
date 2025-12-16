@@ -1,25 +1,40 @@
+import json
+
 from litestar.exceptions import HTTPException
 from litestar.status_codes import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
     HTTP_409_CONFLICT,
 )
+from redis.asyncio import Redis
 
 from src.repositories.product_repository import ProductRepository
 from src.schemas import ProductAddDTO, ProductDTO, ProductUpdateDTO
 
 
 class ProductService:
-    def __init__(self, product_repo: ProductRepository):
+    def __init__(self, product_repo: ProductRepository, redis: Redis):
         self.product_repo = product_repo
+        self.redis = redis
 
     async def get_by_id(self, product_id: int) -> ProductDTO:
+        key = f"product:{product_id}"
+        cached = await self.redis.get(key)
+        if cached:
+            return ProductDTO.model_validate(json.loads(cached))
+
         product = await self.product_repo.get_by_id(product_id)
         if not product:
             raise HTTPException(
                 status_code=HTTP_404_NOT_FOUND,
                 detail=f"Product with ID {product_id} not found",
             )
+
+        # сохраняем в Redis с TTL 10 минут
+        await self.redis.setex(
+            key, 600, json.dumps(ProductDTO.model_validate(product).model_dump())
+        )
+
         return ProductDTO.model_validate(product)
 
     async def create(self, product_data: ProductAddDTO) -> ProductDTO:
@@ -45,6 +60,7 @@ class ProductService:
         try:
             await self.product_repo.delete(product)
             await self.product_repo.session.commit()
+            await self.redis.delete(f"product:{product_id}")
         except Exception as exc:
             await self.product_repo.session.rollback()
             raise HTTPException(
@@ -73,6 +89,7 @@ class ProductService:
         try:
             await self.product_repo.update(product, product_data)
             await self.product_repo.session.commit()
+            await self.redis.delete(f"product:{product_id}")
         except Exception as exc:
             await self.product_repo.session.rollback()
             raise HTTPException(

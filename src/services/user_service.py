@@ -1,23 +1,37 @@
+import json
 from typing import Optional
 
 from litestar.exceptions import HTTPException
 from litestar.status_codes import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
+from redis.asyncio import Redis
 
 from src.repositories.user_repository import UserRepository
 from src.schemas import UserAddDTO, UserDTO, UserUpdateDTO
 
 
 class UserService:
-    def __init__(self, user_repo: UserRepository):
+    def __init__(self, user_repo: UserRepository, redis: Redis):
         self.user_repo = user_repo
+        self.redis = redis
 
     async def get_by_id(self, user_id: int) -> UserDTO:
+        key = f"user:{user_id}"
+        cached = await self.redis.get(key)
+        if cached:
+            return UserDTO.model_validate(json.loads(cached))
+
         user = await self.user_repo.get_by_id(user_id)
         if not user:
             raise HTTPException(
                 status_code=HTTP_404_NOT_FOUND,
                 detail=f"User with ID {user_id} not found",
             )
+
+        # сохраняем в Redis с TTL 1 час
+        await self.redis.setex(
+            key, 3600, json.dumps(UserDTO.model_validate(user).model_dump())
+        )
+
         return UserDTO.model_validate(user)
 
     async def create(self, user_data: UserAddDTO) -> UserDTO:
@@ -44,6 +58,7 @@ class UserService:
         try:
             await self.user_repo.delete(user)
             await self.user_repo.session.commit()
+            await self.redis.delete(f"user:{user_id}")
         except Exception as exc:
             await self.user_repo.session.rollback()
             raise HTTPException(
@@ -75,6 +90,7 @@ class UserService:
         try:
             await self.user_repo.update(user, user_data)
             await self.user_repo.session.commit()
+            await self.redis.delete(f"user:{user_id}")
         except Exception as exc:
             await self.user_repo.session.rollback()
             raise HTTPException(
