@@ -11,15 +11,15 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from config import settings
-from controllers.cart_controller import CartController
-from controllers.user_controller import UserController
-from database import Base
-from repositories.address_repository import AddressRepository
-from repositories.cart_repository import CartRepository
-from repositories.product_repository import ProductRepository
-from repositories.user_repository import UserRepository
-from schemas import (
+from src.config import settings
+from src.controllers.cart_controller import CartController
+from src.controllers.user_controller import UserController
+from src.database import Base
+from src.repositories.address_repository import AddressRepository
+from src.repositories.cart_repository import CartRepository
+from src.repositories.product_repository import ProductRepository
+from src.repositories.user_repository import UserRepository
+from src.schemas import (
     AddressAddDTO,
     AddressDTO,
     CartAddDTO,
@@ -29,8 +29,8 @@ from schemas import (
     UserAddDTO,
     UserDTO,
 )
-from services.cart_service import CartService
-from services.user_service import UserService
+from src.services.cart_service import CartService
+from src.services.user_service import UserService
 
 TEST_DATABASE_URL = f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD.get_secret_value()}@{settings.DB_HOST}:{settings.DB_PORT}/test_db"
 

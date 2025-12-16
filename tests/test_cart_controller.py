@@ -3,10 +3,9 @@ from litestar.status_codes import (
     HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_204_NO_CONTENT,
-    HTTP_400_BAD_REQUEST,
 )
 
-from schemas import AddressDTO, CartAddDTO, CartDTO, CartProductDTO, UserDTO
+from src.schemas import AddressDTO, CartAddDTO, CartDTO, CartProductDTO, UserDTO
 
 
 class TestCartController:

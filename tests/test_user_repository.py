@@ -1,7 +1,7 @@
 import pytest
 
-from repositories.user_repository import UserRepository
-from schemas import UserAddDTO, UserDTO, UserUpdateDTO
+from src.repositories.user_repository import UserRepository
+from src.schemas import UserAddDTO, UserDTO, UserUpdateDTO
 
 
 class TestUserRepository:

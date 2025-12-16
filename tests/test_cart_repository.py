@@ -1,7 +1,7 @@
 import pytest
 
-from repositories.cart_repository import CartRepository
-from schemas import CartAddDTO, CartDTO, CartUpdateDTO, ProductDTO, UserDTO
+from src.repositories.cart_repository import CartRepository
+from src.schemas import CartAddDTO, CartDTO, CartUpdateDTO, ProductDTO, UserDTO
 
 
 class TestCartRepository:

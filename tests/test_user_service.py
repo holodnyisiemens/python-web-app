@@ -2,9 +2,9 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 
-from repositories.user_repository import UserRepository
-from schemas import UserAddDTO, UserDTO
-from services.user_service import UserService
+from src.repositories.user_repository import UserRepository
+from src.schemas import UserAddDTO, UserDTO
+from src.services.user_service import UserService
 
 
 class TestUserService:

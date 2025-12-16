@@ -2,12 +2,12 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 
-from repositories.address_repository import AddressRepository
-from repositories.cart_repository import CartRepository
-from repositories.product_repository import ProductRepository
-from repositories.user_repository import UserRepository
-from schemas import CartAddDTO, CartDTO, ProductDTO
-from services.cart_service import CartService
+from src.repositories.address_repository import AddressRepository
+from src.repositories.cart_repository import CartRepository
+from src.repositories.product_repository import ProductRepository
+from src.repositories.user_repository import UserRepository
+from src.schemas import CartAddDTO, CartDTO, ProductDTO
+from src.services.cart_service import CartService
 
 
 class TestCartService:

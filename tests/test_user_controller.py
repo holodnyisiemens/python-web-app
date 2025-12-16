@@ -1,6 +1,6 @@
 import pytest
 
-from schemas import UserAddDTO, UserDTO
+from src.schemas import UserAddDTO, UserDTO
 
 
 class TestUserController:
