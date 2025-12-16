@@ -5,8 +5,8 @@ from litestar.status_codes import (
     HTTP_409_CONFLICT,
 )
 
-from repositories.product_repository import ProductRepository
-from schemas import ProductAddDTO, ProductDTO, ProductUpdateDTO
+from src.repositories.product_repository import ProductRepository
+from src.schemas import ProductAddDTO, ProductDTO, ProductUpdateDTO
 
 
 class ProductService:
