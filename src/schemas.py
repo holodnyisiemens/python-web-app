@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr
@@ -136,3 +137,12 @@ class CartProductDTO(CartProductAddDTO):
 class CartProductRelDTO(CartProductDTO):
     cart: CartDTO
     product: ProductDTO
+
+
+class ReportAddDTO(BaseDTO):
+    order_id: int
+    count_product: int
+
+
+class ReportDTO(ReportAddDTO):
+    report_at: datetime

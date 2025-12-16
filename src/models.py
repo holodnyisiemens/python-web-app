@@ -116,6 +116,12 @@ class Cart(Base):
         overlaps="products,carts",
     )
 
+    report: Mapped["Report"] = relationship(
+        back_populates="cart",
+        cascade="all, delete",
+        uselist=False,  # один отчет на один заказ
+    )
+
 
 class CartProduct(Base):
     __tablename__ = "cart_product"
@@ -140,3 +146,22 @@ class CartProduct(Base):
     product: Mapped["Product"] = relationship(
         overlaps="products,carts",
     )
+
+
+class Report(Base):
+    __tablename__ = "reports"
+
+    cart_id: Mapped[int] = mapped_column(
+        ForeignKey("carts.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+
+    count_product: Mapped[int] = mapped_column(nullable=False)
+
+    report_at: Mapped[datetime] = mapped_column(default=datetime.now)
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.now,
+        onupdate=datetime.now,
+    )
+
+    cart: Mapped["Cart"] = relationship(back_populates="report")
