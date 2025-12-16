@@ -240,4 +240,5 @@ async def redis():
     )
 
     yield redis
+    await redis.flushdb()
     await redis.aclose()
