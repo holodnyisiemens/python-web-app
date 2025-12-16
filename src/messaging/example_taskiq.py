@@ -19,7 +19,7 @@ scheduler = TaskiqScheduler(
         {
             "cron": "*/1 * * * *",
             "args": ["Cron_User"],
-            "schedule_id": "greet_every_mitute",
+            "schedule_id": "greet_every_minute",
         }
     ]
 )
