@@ -42,9 +42,20 @@ services:
       - RABBITMQ_DEFAULT_VHOST=local
     volumes:
       - rabbitmq_data:/data
+    restart: unless-stopped
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
 
 volumes:
   db_data:
     name: "db_data"
   rabbitmq_data:
     name: "rabbitmq_data"
+  redis_data:
+    name: "redis_data"
