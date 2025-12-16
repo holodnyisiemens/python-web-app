@@ -30,7 +30,7 @@ services:
     ports:
       - "8888:8888"
     restart: unless-stopped
-    command: python src/main.py
+    command: python -m src.main
   
   rabbitmq:
     container_name: rabbitmq
