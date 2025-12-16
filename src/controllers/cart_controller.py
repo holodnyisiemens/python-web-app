@@ -1,13 +1,13 @@
 from litestar import Controller, delete, get, post, put
 
-from schemas import (
+from src.schemas import (
     CartAddDTO,
     CartDTO,
     CartProductAddDTO,
     CartProductDTO,
     CartUpdateDTO,
 )
-from services.cart_service import CartService
+from src.services.cart_service import CartService
 
 
 class CartController(Controller):

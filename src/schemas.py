@@ -69,7 +69,7 @@ class AddressRelDTO(AddressDTO):
     user: "UserDTO"
 
 
-class ProductAddDTO(BaseModel):
+class ProductAddDTO(BaseDTO):
     title: str
     description: Optional[str] = None
     price: float

@@ -4,8 +4,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from models import Cart, CartProduct, Product
-from schemas import CartAddDTO, CartUpdateDTO
+from src.models import Cart, CartProduct, Product
+from src.schemas import CartAddDTO, CartUpdateDTO
 
 
 class CartRepository:

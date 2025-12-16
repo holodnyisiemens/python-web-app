@@ -3,8 +3,8 @@ from typing import Optional
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import User
-from schemas import UserAddDTO, UserUpdateDTO
+from src.models import User
+from src.schemas import UserAddDTO, UserUpdateDTO
 
 
 class UserRepository:

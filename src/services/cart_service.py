@@ -1,11 +1,11 @@
 from litestar.exceptions import HTTPException
 from litestar.status_codes import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
-from repositories.address_repository import AddressRepository
-from repositories.cart_repository import CartRepository
-from repositories.product_repository import ProductRepository
-from repositories.user_repository import UserRepository
-from schemas import CartAddDTO, CartDTO, CartProductDTO, CartUpdateDTO
+from src.repositories.address_repository import AddressRepository
+from src.repositories.cart_repository import CartRepository
+from src.repositories.product_repository import ProductRepository
+from src.repositories.user_repository import UserRepository
+from src.schemas import CartAddDTO, CartDTO, CartProductDTO, CartUpdateDTO
 
 
 class CartService:

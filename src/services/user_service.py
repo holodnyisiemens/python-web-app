@@ -3,8 +3,8 @@ from typing import Optional
 from litestar.exceptions import HTTPException
 from litestar.status_codes import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
-from repositories.user_repository import UserRepository
-from schemas import UserAddDTO, UserDTO, UserUpdateDTO
+from src.repositories.user_repository import UserRepository
+from src.schemas import UserAddDTO, UserDTO, UserUpdateDTO
 
 
 class UserService:

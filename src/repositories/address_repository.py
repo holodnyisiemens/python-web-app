@@ -3,8 +3,8 @@ from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import Address
-from schemas import AddressAddDTO, AddressUpdateDTO
+from src.models import Address
+from src.schemas import AddressAddDTO, AddressUpdateDTO
 
 
 class AddressRepository:

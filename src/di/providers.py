@@ -2,13 +2,13 @@ from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database import async_session_factory
-from repositories.address_repository import AddressRepository
-from repositories.cart_repository import CartRepository
-from repositories.product_repository import ProductRepository
-from repositories.user_repository import UserRepository
-from services.cart_service import CartService
-from services.user_service import UserService
+from src.database import async_session_factory
+from src.repositories.address_repository import AddressRepository
+from src.repositories.cart_repository import CartRepository
+from src.repositories.product_repository import ProductRepository
+from src.repositories.user_repository import UserRepository
+from src.services.cart_service import CartService
+from src.services.user_service import UserService
 
 
 async def provide_db_session() -> AsyncGenerator[AsyncSession, None]:

@@ -3,8 +3,8 @@ from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import Product
-from schemas import ProductAddDTO, ProductUpdateDTO
+from src.models import Product
+from src.schemas import ProductAddDTO, ProductUpdateDTO
 
 
 class ProductRepository:
