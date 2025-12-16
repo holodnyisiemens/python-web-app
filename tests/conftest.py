@@ -4,6 +4,7 @@ import pytest
 from litestar import Litestar
 from litestar.di import Provide
 from litestar.testing import AsyncTestClient
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -227,3 +228,16 @@ async def product_2(
     product_repository: ProductRepository, product_data_2: ProductAddDTO
 ) -> ProductDTO:
     return await product_repository.create(product_data_2)
+
+
+@pytest.fixture
+async def redis():
+    redis = Redis(
+        host=settings.REDIS_HOST,
+        port=settings.REDIS_PORT,
+        db=1,
+        decode_responses=True,
+    )
+
+    yield redis
+    await redis.aclose()
